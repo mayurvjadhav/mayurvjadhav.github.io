@@ -8,13 +8,12 @@ let w_icon = document.querySelector(".weather_icon");
 let w_temperature = document.querySelector(".weather_temperature");
 let w_minTem = document.querySelector(".weather_min");
 let w_maxTem = document.querySelector(".weather_max");
-const toggleSwitch = document.querySelector(".ui-switch input");
+let toggleSwitch = document.querySelector(".ui-switch input");
 let w_feelslike = document.querySelector(".weather_feelslike");
 let w_humidity = document.querySelector(".weather_humidity");
 let w_wind = document.querySelector(".weather_wind");
 let w_pressure = document.querySelector(".weather_pressure");
 let citySearch = document.querySelector(".weather_search");
-let darkSwitch = document.querySelector("input[type='checkbox']");
 let receivedRecentCity = localStorage.getItem("recentCity");
 let receivedDarkModeStatus = localStorage.getItem("darkMode");
 
