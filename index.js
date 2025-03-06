@@ -1,6 +1,7 @@
 let darkFonts = document.querySelector(".weather_body");
 let darkWeatherCard = document.querySelectorAll(".weather_card");
 let darkContainer = document.querySelector(".container");
+let cityInput = document.querySelector(".city_name");
 let cityName = document.querySelector(".weather_city");
 let dateTime = document.querySelector(".weather_date_time");
 let w_forecast = document.querySelector(".weather_forecast");
