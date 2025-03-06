@@ -80,7 +80,6 @@ citySearch.appendChild(tempSuggestionBox);
 
 // Show suggestions as user types
 cityInput.addEventListener("input", () => {
-  let cityInput = document.querySelector(".city_name");
   let value = cityInput.value.toLowerCase();
   tempSuggestionBox.innerHTML = "";
 
