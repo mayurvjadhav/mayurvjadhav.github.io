@@ -1,99 +1,219 @@
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "../utils/lenis";
+
 export const Skills = ({ darkMode }) => {
-  const skills = [
+  const containerRef = useRef(null);
+  const trackRef = useRef(null);
+  const [activeCategory, setActiveCategory] = useState(0);
+
+  const skillCategories = [
     {
-      name: "Frontend",
+      id: "frontend",
+      num: "01",
+      title: "Frontend",
+      description: "Building responsive, maintainable user interfaces with modern frameworks and CSS.",
       skills: [
+        "React.js",
+        "Angular",
+        "JavaScript",
+        "TypeScript",
         "HTML5",
         "CSS3",
-        "JavaScript",
-        "React",
         "Tailwind CSS",
         "Bootstrap",
-        "axios",
-        "redux",
+        "Redux / Redux Toolkit",
+        "Axios",
+        "Responsive Design",
       ],
     },
     {
-      name: "Backend",
-      skills: ["Node.js", "Express"],
+      id: "backend",
+      num: "02",
+      title: "Backend",
+      description: "Engineering secure RESTful APIs, business logic and server-side services.",
+      skills: [
+        "Node.js",
+        "Express.js",
+        "C#",
+        "ASP.NET",
+        "ASP.NET Core",
+        "REST APIs",
+        "JWT / Authentication",
+        "Middleware",
+        "CORS",
+        "Socket.io",
+      ],
     },
     {
-      name: "Database",
-      skills: ["MongoDB", "MySQL"],
+      id: "databases",
+      num: "03",
+      title: "Databases",
+      description: "Designing relational schemas, stored procedures, data querying and NoSQL stores.",
+      skills: [
+        "MongoDB",
+        "Mongoose",
+        "MySQL",
+        "SQL Server",
+        "Supabase",
+      ],
     },
     {
-      name: "Version Control",
-      skills: ["git ", "github"],
+      id: "tools",
+      num: "04",
+      title: "Tools & Workflow",
+      description: "Version control, build tools, API testing and reporting utilities.",
+      skills: [
+        "Git",
+        "GitHub",
+        "Vite",
+        "Postman",
+        "DevExpress",
+        "ExcelJS",
+        "npm",
+      ],
     },
-    // {
-    //   name: "DevOps & Tools",
-    //   skills: [
-    //     "Git",
-    //     "GitHub",
-    //     "Docker",
-    //     "AWS",
-    //     "Azure",
-    //     "Heroku",
-    //     "Netlify",
-    //     "Vercel",
-    //     "CI/CD",
-    //     "Jest",
-    //     "Webpack",
-    //   ],
-    // },
-    // {
-    //   name: "Design",
-    //   skills: [
-    //     "Figma",
-    //     "Adobe XD",
-    //     "Photoshop",
-    //     "Illustrator",
-    //     "UI/UX Design",
-    //     "Responsive Design",
-    //     "Wireframing",
-    //     "Prototyping",
-    //   ],
-    // },
   ];
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const isMobile = window.innerWidth < 768;
+
+    if (prefersReducedMotion || isMobile) return;
+
+    const ctx = gsap.context(() => {
+      const track = trackRef.current;
+      if (!track) return;
+
+      const totalScroll = track.scrollWidth - window.innerWidth + 120;
+
+      gsap.to(track, {
+        x: () => -totalScroll,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: () => `+=${totalScroll}`,
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const index = Math.min(
+              Math.floor(self.progress * skillCategories.length),
+              skillCategories.length - 1
+            );
+            setActiveCategory(index);
+          },
+        },
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [skillCategories.length]);
 
   return (
     <section
       id="skills"
-      className={`py-16 ${darkMode ? "bg-gray-900" : "bg-white"}`}
+      ref={containerRef}
+      className="relative border-t border-zinc-200/60 dark:border-zinc-800/80 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2
-          className={`text-3xl font-bold mb-6 ${
-            darkMode ? "text-blue-400" : "text-blue-600"
-          } text-center`}
-        >
-          Skills
-        </h2>
+      {/* Desktop Horizontal Pinned Stage */}
+      <div className="hidden md:flex flex-col justify-center min-h-screen py-16">
+        {/* Fixed Header Bar in Pinned View */}
+        <div className="max-w-6xl mx-auto px-6 w-full mb-10 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                02 // Skills
+              </span>
+              <span className="text-zinc-300 dark:text-zinc-700">•</span>
+              <span className="text-xs font-mono text-zinc-500">
+                Horizontal Scroll Gallery
+              </span>
+            </div>
+            <h2
+              className={`text-2xl sm:text-3xl font-bold tracking-tight ${
+                darkMode ? "text-white" : "text-zinc-900"
+              }`}
+            >
+              Technical Expertise
+            </h2>
+          </div>
 
-        <div
-          className={`p-6 rounded-lg shadow-md ${
-            darkMode ? "bg-gray-800" : "bg-gray-50"
-          } max-w-4xl mx-auto`}
-        >
-          <div className="flex flex-wrap gap-y-6">
-            {skills.map((category, index) => (
-              <div key={index} className="w-full md:w-1/2 px-3">
-                <h3
-                  className={`text-lg font-semibold mb-3 ${
-                    darkMode ? "text-blue-300" : "text-blue-500"
-                  }`}
-                >
-                  {category.name}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill, skillIndex) => (
+          {/* Category tracker */}
+          <div className="flex items-center gap-2 font-mono text-xs">
+            {skillCategories.map((cat, idx) => (
+              <span
+                key={cat.id}
+                className={`px-3 py-1 rounded-lg border transition-all duration-300 ${
+                  activeCategory === idx
+                    ? darkMode
+                      ? "bg-zinc-100 text-zinc-900 border-white font-semibold"
+                      : "bg-zinc-900 text-white border-zinc-900 font-semibold"
+                    : darkMode
+                    ? "border-zinc-800 text-zinc-500"
+                    : "border-zinc-200 text-zinc-400"
+                }`}
+              >
+                {cat.num} {cat.title}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Horizontal Track */}
+        <div className="w-full overflow-hidden">
+          <div
+            ref={trackRef}
+            className="flex items-stretch gap-6 pl-12 sm:pl-20 pr-32 will-change-transform"
+            style={{ width: "max-content" }}
+          >
+            {skillCategories.map((category) => (
+              <div
+                key={category.id}
+                className={`w-[440px] flex-shrink-0 p-8 rounded-2xl border flex flex-col justify-between transition-colors shadow-sm ${
+                  darkMode
+                    ? "bg-zinc-900/50 border-zinc-800/90"
+                    : "bg-white border-zinc-200"
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-mono text-emerald-500 font-semibold">
+                      {"//"} {category.num}
+                    </span>
+                    <span className="text-xs font-mono text-zinc-500">
+                      {category.skills.length} Technologies
+                    </span>
+                  </div>
+
+                  <h3
+                    className={`text-2xl font-bold mb-3 ${
+                      darkMode ? "text-white" : "text-zinc-900"
+                    }`}
+                  >
+                    {category.title}
+                  </h3>
+
+                  <p
+                    className={`text-sm leading-relaxed mb-6 ${
+                      darkMode ? "text-zinc-400" : "text-zinc-600"
+                    }`}
+                  >
+                    {category.description}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2 pt-6 border-t border-zinc-200/50 dark:border-zinc-800/60">
+                  {category.skills.map((skill, sIdx) => (
                     <span
-                      key={skillIndex}
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      key={sIdx}
+                      className={`text-xs font-mono px-3 py-1.5 rounded-lg border transition-colors ${
                         darkMode
-                          ? "bg-gray-700 text-blue-300 border border-blue-400/30 hover:border-blue-400/70"
-                          : "bg-blue-100 text-blue-800 border border-blue-200 hover:border-blue-300"
-                      } transition-colors duration-200`}
+                          ? "bg-zinc-800/70 border-zinc-700/60 text-zinc-200"
+                          : "bg-zinc-100 border-zinc-200 text-zinc-800"
+                      }`}
                     >
                       {skill}
                     </span>
@@ -102,6 +222,70 @@ export const Skills = ({ darkMode }) => {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Mobile Vertical Fallback */}
+      <div className="md:hidden py-16 px-4">
+        <div className="mb-8">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block mb-2">
+            02 // Skills
+          </span>
+          <h2
+            className={`text-2xl font-bold tracking-tight mb-2 ${
+              darkMode ? "text-white" : "text-zinc-900"
+            }`}
+          >
+            Technical Expertise
+          </h2>
+          <p className="text-sm text-zinc-500">
+            Technologies I work with across frontend, backend and databases.
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          {skillCategories.map((category) => (
+            <div
+              key={category.id}
+              className={`p-6 rounded-xl border ${
+                darkMode ? "bg-zinc-900/40 border-zinc-800" : "bg-white border-zinc-200"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono text-emerald-500 font-semibold">
+                  {"//"} {category.num}
+                </span>
+                <h3
+                  className={`text-lg font-bold ${
+                    darkMode ? "text-white" : "text-zinc-900"
+                  }`}
+                >
+                  {category.title}
+                </h3>
+              </div>
+              <p
+                className={`text-xs mb-4 ${
+                  darkMode ? "text-zinc-400" : "text-zinc-600"
+                }`}
+              >
+                {category.description}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {category.skills.map((skill, sIdx) => (
+                  <span
+                    key={sIdx}
+                    className={`text-[11px] font-mono px-2 py-1 rounded border ${
+                      darkMode
+                        ? "bg-zinc-800/60 border-zinc-700 text-zinc-300"
+                        : "bg-zinc-100 border-zinc-200 text-zinc-700"
+                    }`}
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

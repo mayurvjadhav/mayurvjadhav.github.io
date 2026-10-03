@@ -5,5 +5,17 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/portfolio/",
+  base: "./",
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ["three"],
+          lenis: ["lenis"],
+          gsap: ["gsap", "gsap/ScrollTrigger"],
+        },
+      },
+    },
+  },
 });
+

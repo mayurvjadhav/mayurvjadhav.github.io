@@ -1,226 +1,242 @@
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "../utils/lenis";
+
 export const Contact = ({ darkMode }) => {
+  const [copied, setCopied] = useState(false);
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const card1Ref = useRef(null);
+  const card2Ref = useRef(null);
+  const email = "jadhavmayur26062001@gmail.com";
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "top 30%",
+            scrub: 0.8,
+          },
+        })
+        .fromTo(
+          headingRef.current,
+          { autoAlpha: 0, y: 35, scale: 0.96 },
+          { autoAlpha: 1, y: 0, scale: 1, ease: "power1.out" }
+        )
+        .fromTo(
+          card1Ref.current,
+          { autoAlpha: 0, y: 40, x: -20 },
+          { autoAlpha: 1, y: 0, x: 0, ease: "power1.out" },
+          "-=0.2"
+        )
+        .fromTo(
+          card2Ref.current,
+          { autoAlpha: 0, y: 40, x: 20 },
+          { autoAlpha: 1, y: 0, x: 0, ease: "power1.out" },
+          "-=0.3"
+        );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
       id="contact"
-      className={`py-16 ${darkMode ? "bg-gray-800" : "bg-blue-50"} mt-auto`}
+      ref={sectionRef}
+      className="relative py-24 md:py-32 border-t border-zinc-200/60 dark:border-zinc-800/80 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+      {/* Concluding atmospheric glow */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none opacity-30 dark:opacity-20"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 50% at 50% 100%, rgba(56, 189, 248, 0.15), transparent 70%)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
+        <div ref={headingRef} className="mb-12 text-center will-change-transform">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block mb-3">
+            04 // Conclusion
+          </span>
           <h2
-            className={`text-3xl font-bold mb-2 ${
-              darkMode ? "text-blue-400" : "text-blue-600"
+            className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 ${
+              darkMode ? "text-white" : "text-zinc-900"
             }`}
           >
-            Get In Touch
+            Get in Touch
           </h2>
-          <p className="max-w-2xl mx-auto">reach out here!</p>
+          <p
+            className={`text-base sm:text-lg max-w-xl mx-auto leading-relaxed ${
+              darkMode ? "text-zinc-400" : "text-zinc-600"
+            }`}
+          >
+            Have an open role, software project, or technical question? Let&apos;s connect.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Email Card */}
           <div
-            className={`p-6 rounded-lg shadow-md ${
-              darkMode ? "bg-gray-700" : "bg-white"
-            } flex flex-col items-center`}
+            ref={card1Ref}
+            className={`p-7 rounded-2xl border flex flex-col justify-between h-full transition-all will-change-transform ${
+              darkMode
+                ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700/80 hover:shadow-xl hover:shadow-black/40"
+                : "bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-lg hover:shadow-zinc-200/50"
+            }`}
           >
-            <div
-              className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
-                darkMode ? "bg-gray-600" : "bg-blue-100"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-8 w-8 ${
-                  darkMode ? "text-blue-400" : "text-blue-600"
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Email</h3>
-            <p
-              className={`mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}
-            >
-              ja********001@gmail.com
-            </p>
-            <a
-              onClick={() =>
-                window.open(
-                  "https://mail.google.com/mail/?view=cm&fs=1&to=jadhavmayur26062001@gmail.com",
-                  "_blank"
-                )
-              }
-              className={`mt-2 px-4 py-2 rounded ${
-                darkMode
-                  ? "bg-blue-500 hover:bg-blue-600"
-                  : "bg-blue-600 hover:bg-blue-700"
-              } text-white transition-colors duration-200`}
-            >
-              Send Email
-            </a>
-          </div>
-
-          <div
-            className={`p-6 rounded-lg shadow-md ${
-              darkMode ? "bg-gray-700" : "bg-white"
-            } flex flex-col items-center`}
-          >
-            <div
-              className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
-                darkMode ? "bg-gray-600" : "bg-blue-100"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-8 w-8 ${
-                  darkMode ? "text-blue-400" : "text-blue-600"
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Social Media</h3>
-            <div className="flex space-x-4 mb-2">
-              <a
-                href="https://www.linkedin.com/in/thatguytime"
-                target="blank"
-                className={`${
-                  darkMode
-                    ? "text-gray-300 hover:text-blue-400"
-                    : "text-gray-600 hover:text-blue-600"
-                } transition-colors duration-200`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z" />
-                </svg>
-              </a>
-              <a
-                href="https://github.com/mayurvjadhav"
-                target="blank"
-                className={`${
-                  darkMode
-                    ? "text-gray-300 hover:text-blue-400"
-                    : "text-gray-600 hover:text-blue-600"
-                } transition-colors duration-200`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                </svg>
-              </a>
-              <a
-                href="https://www.instagram.com/thatguytime"
-                target="blank"
-                className={`${
-                  darkMode
-                    ? "text-gray-300 hover:text-blue-400"
-                    : "text-gray-600 hover:text-blue-600"
-                } transition-colors duration-200`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                </svg>
-              </a>
-            </div>
-            <button
-              className={`mt-2 px-4 py-2 rounded ${
-                darkMode ? "bg-blue-500" : "bg-blue-600 hover:bg-blue-700"
-              } text-white transition-colors duration-200`}
-            >
-              Connect
-            </button>
-          </div>
-        </div>
-
-        {/* <div className="max-w-4xl mx-auto mt-12">
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block mb-2 font-medium" htmlFor="name">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                className={`w-full px-4 py-2 rounded-md border ${
-                  darkMode
-                    ? "bg-gray-700 border-gray-600 text-white"
-                    : "bg-white border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                placeholder="Your Name"
-              />
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-mono text-zinc-500">{"//"} Direct Email</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              </div>
+
+              <h3
+                className={`text-lg font-bold mb-2 ${
+                  darkMode ? "text-white" : "text-zinc-900"
+                }`}
+              >
+                Start a Conversation
+              </h3>
+              <p
+                className={`text-sm mb-5 font-mono break-all ${
+                  darkMode ? "text-zinc-300" : "text-zinc-700"
+                }`}
+              >
+                {email}
+              </p>
             </div>
-            <div>
-              <label className="block mb-2 font-medium" htmlFor="email">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className={`w-full px-4 py-2 rounded-md border ${
-                  darkMode
-                    ? "bg-gray-700 border-gray-600 text-white"
-                    : "bg-white border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                placeholder="Your Email"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block mb-2 font-medium" htmlFor="message">
-                Message
-              </label>
-              <textarea
-                id="message"
-                rows="4"
-                className={`w-full px-4 py-2 rounded-md border ${
-                  darkMode
-                    ? "bg-gray-700 border-gray-600 text-white"
-                    : "bg-white border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                placeholder="Your Message"
-              ></textarea>
-            </div>
-            <div className="md:col-span-2">
+
+            <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-zinc-200/60 dark:border-zinc-800/80">
               <button
-                className={`w-full md:w-auto px-6 py-3 rounded-md ${
-                  darkMode
-                    ? "bg-blue-500 hover:bg-blue-600"
-                    : "bg-blue-600 hover:bg-blue-700"
-                } text-white font-medium transition-colors duration-200`}
+                onClick={handleCopyEmail}
+                className={`px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${
+                  copied
+                    ? "bg-emerald-600 text-white"
+                    : darkMode
+                    ? "bg-zinc-100 text-zinc-900 hover:bg-white"
+                    : "bg-zinc-900 text-white hover:bg-zinc-800"
+                }`}
               >
-                Send Message
+                {copied ? "Copied to Clipboard!" : "Copy Email"}
               </button>
+
+              <a
+                href={`mailto:${email}`}
+                className={`px-3.5 py-2 rounded-lg text-xs font-medium border transition-colors ${
+                  darkMode
+                    ? "border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                    : "border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+                }`}
+              >
+                Default Mail App
+              </a>
+
+              <a
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${email}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`px-3.5 py-2 rounded-lg text-xs font-medium border transition-colors ${
+                  darkMode
+                    ? "border-zinc-700 text-zinc-400 hover:text-white hover:bg-zinc-800"
+                    : "border-zinc-300 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100"
+                }`}
+              >
+                Gmail ↗
+              </a>
             </div>
-          </form>
-        </div> */}
+          </div>
+
+          {/* Social & Location Card */}
+          <div
+            ref={card2Ref}
+            className={`p-7 rounded-2xl border flex flex-col justify-between gap-6 h-full transition-all will-change-transform ${
+              darkMode
+                ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700/80 hover:shadow-xl hover:shadow-black/40"
+                : "bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-lg hover:shadow-zinc-200/50"
+            }`}
+          >
+            {/* Social Links */}
+            <div>
+              <span className="text-xs font-mono text-zinc-500 mb-3 block">
+                {"//"} Developer Network
+              </span>
+              <h3
+                className={`text-lg font-bold mb-3 ${
+                  darkMode ? "text-white" : "text-zinc-900"
+                }`}
+              >
+                Professional Profiles
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="https://github.com/mayurvjadhav"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium border transition-colors ${
+                    darkMode
+                      ? "border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                      : "border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5 fill-current" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                  </svg>
+                  <span>GitHub</span>
+                </a>
+
+                <a
+                  href="https://www.linkedin.com/in/thatguytime"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium border transition-colors ${
+                    darkMode
+                      ? "border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                      : "border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5 fill-current" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                  </svg>
+                  <span>LinkedIn</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Location Notice per Section 18 */}
+            <div className="pt-4 border-t border-zinc-200/60 dark:border-zinc-800/80">
+              <span
+                className={`text-xs block font-semibold ${
+                  darkMode ? "text-zinc-300" : "text-zinc-800"
+                }`}
+              >
+                Based in Maharashtra, India
+              </span>
+              <span
+                className={`text-xs block ${
+                  darkMode ? "text-zinc-400" : "text-zinc-500"
+                }`}
+              >
+                Open to Pune, Mumbai and remote opportunities
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

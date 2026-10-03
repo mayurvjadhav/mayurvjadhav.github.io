@@ -1,5 +1,3 @@
-import React from "react";
-
 const SkillsSection = () => {
   const skills = [
     {
@@ -30,35 +28,6 @@ const SkillsSection = () => {
       category: "Version Control",
       technologies: ["git/github"],
     },
-    // {
-    //   name: "DevOps & Tools",
-    //   skills: [
-    //     "Git",
-    //     "GitHub",
-    //     "Docker",
-    //     "AWS",
-    //     "Azure",
-    //     "Heroku",
-    //     "Netlify",
-    //     "Vercel",
-    //     "CI/CD",
-    //     "Jest",
-    //     "Webpack",
-    //   ],
-    // },
-    // {
-    //   name: "Design",
-    //   skills: [
-    //     "Figma",
-    //     "Adobe XD",
-    //     "Photoshop",
-    //     "Illustrator",
-    //     "UI/UX Design",
-    //     "Responsive Design",
-    //     "Wireframing",
-    //     "Prototyping",
-    //   ],
-    // },
   ];
 
   return (
@@ -69,16 +38,12 @@ const SkillsSection = () => {
         </h2>
 
         <div className="relative">
-         
-
           <div className="flex justify-between gap-4 relative">
             {skills.map((skill, index) => (
               <div
                 key={skill.category}
                 className="w-1/4 bg-white rounded-lg shadow-lg overflow-hidden relative z-10 border-t-4 border-blue-500 hover:shadow-xl transition-shadow duration-300"
               >
-                
-
                 <div className="p-6">
                   <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
                     <span className="text-blue-600 text-2xl font-bold">
